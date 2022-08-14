@@ -1,0 +1,30 @@
+[package]
+name = "shellcode"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+[build]
+rustflags = [
+    "-C",
+    "link-arg=-nostdlib",
+    "-C",
+    "link-arg=-static",
+    "-C",
+    "link-arg=-Wl,-T./shellcode.ld,--build-id=none",
+    "-C",
+    "relocation-model=pic",
+    "-C",
+    "dynamic-linker /lib/ld-linux.so.2",
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+opt-level = "z"
+lto = true
+codegen-units = 1
